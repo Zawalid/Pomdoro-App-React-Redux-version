@@ -4,6 +4,7 @@ import Settings from "../../features/settings/Settings";
 import CyclesTabs from "../CyclesTabs";
 import Header from "../Header";
 import { useState } from "react";
+import CycleCount from "../CycleCount";
 
 const Layout = styled.div`
   width: 100%;
@@ -37,6 +38,7 @@ export default function AppLayout() {
       <Header onOpenSettings={() => setIsSettingsOpen(true)} />
       <CyclesTabs />
       <Timer />
+      <CycleCount />
       <Settings
         isOpen={isSettingsOpen}
         onClose={() => setIsSettingsOpen(false)}

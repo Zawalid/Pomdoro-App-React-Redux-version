@@ -5,7 +5,7 @@ import { ToggleSwitch } from "../../components/ui/ToggleSwitch";
 import { FlexContainer } from "./Settings";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { changeColorTheme, enableDarkModeWhenRunning } from "./settingsSlice";
+import { changeColorTheme, enableDarkModeWhenRunning } from "../timer/timerSlice";
 import { changeTheme } from "../../utils/helpers";
 
 const StyledThemeColor = styled.div`
@@ -99,7 +99,7 @@ export function ThemeSettings() {
 }
 
 function ThemeColor({ onClose, currentCycle: { cycle, color: currentColor } }) {
-  const { currentCycle } = useSelector((store) => store.timer);
+  const currentCycle  = useSelector((store) => store.currentCycle);
   const dispatch = useDispatch();
 
   return (

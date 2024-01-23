@@ -6,7 +6,7 @@ import { TimerSettings } from "./TimerSettings";
 import { SoundSettings } from "./SoundSettings";
 import { ThemeSettings } from "./ThemeSettings";
 import { useDispatch } from "react-redux";
-import { resetSettings } from "./settingsSlice";
+import { resetSettings } from "../timer/timerSlice";
 
 const StyledSettings = styled.div`
   width: 100%;

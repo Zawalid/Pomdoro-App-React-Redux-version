@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { changeCycle, updateTime } from "../features/timer/timerSlice";
+import { changeCycle } from "../features/timer/timerSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { changeTheme, changeTitle } from "../utils/helpers";
+import { changeTitle } from "../utils/helpers";
 import { useEffect } from "react";
 
 const StyledTabs = styled.div`
@@ -44,44 +44,34 @@ const tabs = [
   {
     label: "Pomodoro",
     value: "pomodoro",
-    title: "Time to focus!",
   },
   {
     label: "Short Break",
     value: "shortBreak",
-    title: "Take a break!",
   },
   {
     label: "Long Break",
     value: "longBreak",
-    title: "Take a break!",
   },
 ];
 
 export default function CyclesTabs() {
   const dispatch = useDispatch();
-  const { currentCycle } = useSelector((store) => store.timer);
-  const settings = useSelector((store) => store.settings);
+  const pomodoroTime = useSelector((store) => store.settings.time.pomodoro);
+  const currentCycle = useSelector((store) => store.currentCycle);
 
   useEffect(() => {
-    changeTitle(settings.pomodoroTime, "Time to focus!");
-  }, [settings]);
+    changeTitle(pomodoroTime, "Time to focus!");
+  }, [pomodoroTime]);
 
   return (
     <StyledTabs>
       {tabs.map((tab) => {
-        const currentCycleTime = settings[`${tab.value}Time`];
-
         return (
           <StyledTab
             key={tab.value}
             className={currentCycle === tab.value ? "active" : ""}
-            onClick={() => {
-              dispatch(changeCycle(tab.value));
-              dispatch(updateTime(currentCycleTime));
-              changeTheme(settings.colorTheme[tab.value]);
-              changeTitle(currentCycleTime, tab.title);
-            }}
+            onClick={() => dispatch(changeCycle(tab.value))}
           >
             <h3>{tab.label}</h3>
           </StyledTab>

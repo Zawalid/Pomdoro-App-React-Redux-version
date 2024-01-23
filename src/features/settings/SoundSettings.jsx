@@ -3,12 +3,12 @@ import {
   changeAlarmSound,
   changeAlarmRepetitions,
   changeTickingSound,
-} from "./settingsSlice";
+} from "../timer/timerSlice";
 import { FaVolumeHigh } from "react-icons/fa6";
 import { InputNumber } from "../../components/ui/InputNumber";
 import { DropDown } from "../../components/ui/DropDown";
 import { FlexContainer } from "./Settings";
-import { playSound } from "../timer/sounds";
+import { playSound } from "../../utils/sounds";
 
 export function SoundSettings() {
   const { alarmSound, alarmRepetitions, tickingSound } = useSelector(
@@ -33,9 +33,11 @@ export function SoundSettings() {
           }}
         />
       </FlexContainer>
-      <FlexContainer style={{
-        justifyContent : 'end'
-      }}>
+      <FlexContainer
+        style={{
+          justifyContent: "end",
+        }}
+      >
         <p>Repeat</p>
         <InputNumber
           min="0"

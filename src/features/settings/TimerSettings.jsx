@@ -11,7 +11,7 @@ import {
   changeLongBreakInterval,
   enableAutoStartBreaks,
   enableAutoStartPomodoro,
-} from "./settingsSlice";
+} from "../timer/timerSlice";
 
 const Times = styled.div`
   display: grid;
@@ -21,9 +21,7 @@ const Times = styled.div`
 
 export function TimerSettings() {
   const {
-    pomodoroTime,
-    shortBreakTime,
-    longBreakTime,
+    time: { pomodoro, shortBreak, longBreak },
     longBreakInterval,
     autoStartBreaks,
     autoStartPomodoro,
@@ -41,21 +39,21 @@ export function TimerSettings() {
       <Times>
         <InputNumber
           min="1"
-          value={pomodoroTime}
+          value={pomodoro}
           onChange={(value) => dispatch(changePomodoroTime(value))}
         >
           Pomodoro
         </InputNumber>
         <InputNumber
           min="0"
-          value={shortBreakTime}
+          value={shortBreak}
           onChange={(value) => dispatch(changeShortBreakTime(value))}
         >
           Short Break
         </InputNumber>
         <InputNumber
           min="0"
-          value={longBreakTime}
+          value={longBreak}
           onChange={(value) => dispatch(changeLongBreakTime(value))}
         >
           Long Break
