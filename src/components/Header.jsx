@@ -1,15 +1,20 @@
 import styled from "styled-components";
 import { CiSettings } from "react-icons/ci";
+import CycleProgress from "./CycleProgress";
 
 const StyledHeader = styled.header`
   width: 100%;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 3px solid #fff;
+  flex-direction: column;
   padding: 0 0 10px 0;
-
+  gap: 20px;
+  
   & > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  & > div > div {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -30,12 +35,15 @@ export default function Header({ onOpenSettings }) {
   return (
     <StyledHeader>
       <div>
-        <Logo src="/Logo.png" alt="logo" />
-        <Heading>Focusize</Heading>
+        <div>
+          <Logo src="/Logo.png" alt="logo" />
+          <Heading>Focusize</Heading>
+        </div>
+        <button onClick={onOpenSettings}>
+          <CiSettings size={30} color="white" />
+        </button>
       </div>
-      <button onClick={onOpenSettings}>
-        <CiSettings size={30} color="white" />
-      </button>
+      <CycleProgress />
     </StyledHeader>
   );
 }

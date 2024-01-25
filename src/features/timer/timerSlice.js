@@ -5,7 +5,7 @@ import {
   sounds,
   playAlarmSound,
   playTickingSound,
-  stopTickingSound,
+  stopSound,
 } from "../../utils/sounds";
 
 const timerSlice = createSlice({
@@ -16,27 +16,25 @@ const timerSlice = createSlice({
     startTimer(state) {
       state.status = "running";
       playTickingSound(sounds[state.settings.tickingSound]);
+      stopSound(sounds[state.settings.alarmSound]);
+      if(state.settings.darkModeWhenRunning) changeTheme('#000000')
     },
     pauseTimer(state) {
       clearInterval(state.interval);
       state.interval = null;
       state.status = "paused";
-      stopTickingSound(sounds[state.settings.tickingSound]);
+      stopSound(sounds[state.settings.tickingSound]);
+      changeTheme(state.settings.colorTheme[state.currentCycle]);
     },
     completeCycle(state) {
       // Stop timer
       clearInterval(state.interval);
       state.interval = null;
       state.status = "idle";
-      stopTickingSound(sounds[state.settings.tickingSound]);
+      stopSound(sounds[state.settings.tickingSound]);
 
       // Update cycle count
       state.cycleCount[state.currentCycle]++;
-      // Play alarm sound
-      playAlarmSound(
-        sounds[state.settings.alarmSound],
-        state.settings.alarmRepetitions
-      );
     },
     changeCycle(state, action) {
       state.currentCycle = action.payload;
@@ -64,12 +62,8 @@ const timerSlice = createSlice({
   },
 });
 
-export const {
-  pauseTimer,
-  changeCycle,
-  updateSettings,
-  resetSettings,
-} = timerSlice.actions;
+export const { pauseTimer, changeCycle, updateSettings, resetSettings } =
+  timerSlice.actions;
 
 export default timerSlice.reducer;
 
@@ -86,11 +80,18 @@ function decrementTime(id) {
       currentTime,
       currentCycle,
       cycleCount: { pomodoro: pomodoroCount },
-      settings: { longBreakInterval },
+      settings: {
+        longBreakInterval,
+        autoStartBreaks,
+        autoStartPomodoro,
+        alarmSound,
+        alarmRepetitions,
+      },
     } = getState();
+
+    // Decrement time
     if (currentTime > 0)
       return dispatch({ type: "timer/decrementTime", payload: id });
-
     // Complete Cycle
     dispatch({ type: "timer/completeCycle" });
     // Switch to next cycle
@@ -100,9 +101,16 @@ function decrementTime(id) {
       longBreakInterval
     );
     dispatch({ type: "timer/changeCycle", payload: nextCycle });
-    // Update cycle count
     // Play alarm sound
+    playAlarmSound(sounds[alarmSound], alarmRepetitions) ;
     // Start timer (if auto start is enabled)
+    if (
+      (nextCycle === "pomodoro" && autoStartPomodoro) ||
+      (["shortBreak", "longBreak"].includes(nextCycle) && autoStartBreaks)
+    ) {
+      const alarmTime = sounds[alarmSound].duration * (+alarmRepetitions + 1);
+      setTimeout(() => dispatch(startTimer()), alarmTime * 1000);
+    }
   };
 }
 

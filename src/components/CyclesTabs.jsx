@@ -10,7 +10,8 @@ const StyledTabs = styled.div`
   gap: 20px;
   padding: 10px;
   border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: ${({ $darkMode }) =>
+    $darkMode ? "transparent" : "rgba(255, 255, 255, 0.1)"};
   box-shadow: -1px 6px 10px rgba(0, 0, 0, 0.3);
 `;
 const StyledTab = styled.button`
@@ -56,15 +57,22 @@ const tabs = [
 export default function CyclesTabs() {
   const dispatch = useDispatch();
   const currentCycle = useSelector((store) => store.currentCycle);
+  const status = useSelector((store) => store.status);
+  const { darkModeWhenRunning } = useSelector((store) => store.settings);
 
+  const isDarkMode = status === "running" && darkModeWhenRunning;
 
   return (
-    <StyledTabs>
+    <StyledTabs $darkMode={isDarkMode}>
       {tabs.map((tab) => {
         return (
           <StyledTab
             key={tab.value}
-            className={currentCycle === tab.value ? "active" : ""}
+            className={
+              currentCycle === tab.value
+                ? `${isDarkMode ? "active_dark" : "active"}`
+                : ""
+            }
             onClick={() => dispatch(changeCycle(tab.value))}
           >
             <h3>{tab.label}</h3>

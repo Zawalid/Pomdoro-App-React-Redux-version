@@ -1,6 +1,6 @@
-# Objectives
+# What I have learned
 
-* **Learn StyledComponents**
-* **Learn Redux/ReduxToolKit**
-* **React Icons**
+## Styled Components
+## React Hook Form
+## Redux And Redux Toolkit
   

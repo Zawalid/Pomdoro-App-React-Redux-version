@@ -29,10 +29,7 @@ export function playTickingSound(sound) {
   sound.loop = true;
   sound.play();
 }
-export function stopTickingSound(sound) {
-  if (!sound) return;
-  sound.pause();
-}
+
 export function playAlarmSound(sound, repetitions) {
   let playCount = repetitions;
   sound.addEventListener("ended", () => {
@@ -40,8 +37,14 @@ export function playAlarmSound(sound, repetitions) {
       sound.play();
       playCount--;
     }
+    console.log('first')
   });
   sound.play();
+}
+
+export function stopSound(sound) {
+  if (!sound) return;
+  sound.pause();
 }
 export function stopAllSounds() {
   Object.keys(sounds).forEach((sound) => {

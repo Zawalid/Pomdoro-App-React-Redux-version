@@ -37,7 +37,7 @@ export function loadState() {
 
     return {
       ...DEFAULT_OPTIONS,
-      value: state.time.pomodoro * 60,
+      currentTime: state.time.pomodoro * 60,
       settings: state,
     };
   } catch (err) {

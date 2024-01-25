@@ -6,6 +6,21 @@ import { FlexContainer } from "./Settings";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
 
+const themes = [
+  "#191970", // Midnight Blue
+  "#556B2F", // Dark Olive Green
+  "#2F4F4F", // Dark Slate Gray
+  "#9932CC", // Dark Orchid
+  "#CD5C5C", // Indian Red
+  "#B8860B", // Dark Goldenrod
+  "#800000", // Maroon
+  "#008080", // Teal
+  "#6B8E23", // Olive Drab
+  "#8B4513", // Saddle Brown
+  "#4682B4", // Steel Blue
+  "#000000", // Black
+];
+
 const StyledThemeColor = styled.div`
   width: 90%;
   min-height: 200px;
@@ -143,18 +158,3 @@ function ThemeColor({
     </Modal>
   );
 }
-
-const themes = [
-  "#A7CEEB",
-  "#FFDC5C",
-  "#228B22",
-  "#FF7F50",
-  "#000080",
-  "#C27BA0",
-  "#36454F",
-  "#40E0D0",
-  "#A52A2A",
-  "#007FFF",
-  "#7DF9FF",
-  "#551A8B",
-];

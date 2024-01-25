@@ -9,11 +9,12 @@ const StyledTimer = styled.div`
   display: grid;
   padding: 20px;
   place-content: center;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: ${({ $darkMode }) =>
+    $darkMode ? "transparent" : "rgba(255, 255, 255, 0.1)"};
   border-radius: 20px;
   box-shadow: 0px 1px 10px rgba(0, 0, 0, 0.3);
   transform: scale(1.1);
-
+  transition: all 0.3s ease-in-out;
   position: relative;
 
   &.running {
@@ -50,10 +51,16 @@ export default function Timer() {
   const currentTime = useSelector((store) => store.currentTime);
   const status = useSelector((store) => store.status);
   const currentCycle = useSelector((store) => store.currentCycle);
-  const pomodoroTime = useSelector((store) => store.settings.time.pomodoro);
+  const {
+    time: { pomodoro: pomodoroTime },
+    darkModeWhenRunning,
+  } = useSelector((store) => store.settings);
 
   return (
-    <StyledTimer className={status}>
+    <StyledTimer
+      className={status}
+      $darkMode={status === "running" && darkModeWhenRunning}
+    >
       <h1>
         {getFormattedTime(
           status === "idle" && currentCycle === "pomodoro"

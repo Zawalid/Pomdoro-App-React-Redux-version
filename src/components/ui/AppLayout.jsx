@@ -15,6 +15,7 @@ const Layout = styled.div`
   align-items: center;
   flex-direction: column;
   gap: 50px;
+  position: relative;
 
   @media screen and (min-width: 640px) {
     max-width: 640px;
