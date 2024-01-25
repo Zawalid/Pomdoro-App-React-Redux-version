@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import styled from "styled-components";
 
 const StyledSwitch = styled.div`
@@ -38,17 +39,29 @@ const StyledSwitch = styled.div`
   }
 `;
 
-export function ToggleSwitch({ checked, onChange }) {
+// export function ToggleSwitch({ checked, onChange, ...props}) {
+//   return (
+//     <StyledSwitch>
+//       <label>
+//         <input
+//           type="checkbox"
+//           checked={checked}
+//           onChange={(e) => onChange(e.target.checked)}
+//           {...props}
+//         />
+//         <div></div>
+//       </label>
+//     </StyledSwitch>
+//   );
+// }
+
+export const ToggleSwitch = forwardRef(function ToggleSwitch({ ...props }, ref) {
   return (
     <StyledSwitch>
       <label>
-        <input
-          type="checkbox"
-          checked={checked}
-          onChange={(e) => onChange(e.target.checked)}
-        />
+        <input type="checkbox" {...props} ref={ref} />
         <div></div>
       </label>
     </StyledSwitch>
   );
-}
+});

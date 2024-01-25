@@ -42,6 +42,15 @@ body {
     width: 100%;
     height: 100%;
 }
+.tippy-box[data-theme="error"] {
+  background-color: #ff3a3a;
+  & .tippy-arrow{
+    color: #ff3a3a;
+  }
+}
+.tippy-box[data-theme="light"] {
+  background-color: #ffffff;
+}
 `;
 
 export default GlobalStyles;

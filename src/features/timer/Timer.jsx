@@ -47,10 +47,10 @@ const StyledButton = styled.button`
 
 export default function Timer() {
   const dispatch = useDispatch();
-  const currentTime = useSelector((store) => store.value);
+  const currentTime = useSelector((store) => store.currentTime);
   const status = useSelector((store) => store.status);
   const currentCycle = useSelector((store) => store.currentCycle);
-  const pomodoroTime = +useSelector((store) => store.settings.time.pomodoro);
+  const pomodoroTime = useSelector((store) => store.settings.time.pomodoro);
 
   return (
     <StyledTimer className={status}>

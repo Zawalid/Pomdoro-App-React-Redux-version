@@ -23,7 +23,7 @@ export const DEFAULT_SETTINGS = {
 };
 
 export const DEFAULT_OPTIONS = {
-  value: 25 * 60, // pomodoroTime * 60
+  currentTime: 25 * 60, // pomodoroTime * 60
   status: "idle", // idle | running | paused
   currentCycle: "pomodoro", // pomodoro | shortBreak | longBreak
   cycleCount: {

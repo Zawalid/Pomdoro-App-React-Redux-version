@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import Timer from "../../features/timer/Timer";
-import Settings from "../../features/settings/Settings";
+import Settings from "../../features/settings-v2/Settings";
 import CyclesTabs from "../CyclesTabs";
 import Header from "../Header";
 import { useState } from "react";

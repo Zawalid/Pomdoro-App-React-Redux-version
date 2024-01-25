@@ -55,13 +55,14 @@ export function DropDown({ currentOption, options, onSelect }) {
       }
       interactive={true}
       arrow={false}
+      theme="light"
       placement={"bottom-end"}
       trigger="click"
       onShow={(instance) => {
         instance.popper.addEventListener("click", () => instance.hide());
       }}
     >
-      <StyledToggler>
+      <StyledToggler type="button">
         {currentOption}
         <FaAngleDown />
       </StyledToggler>

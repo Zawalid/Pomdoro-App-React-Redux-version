@@ -41,57 +41,25 @@ const timerSlice = createSlice({
     changeCycle(state, action) {
       state.currentCycle = action.payload;
       state.status = "idle";
-      state.value = state.settings.time[state.currentCycle] * 60;
+      state.currentTime = state.settings.time[state.currentCycle] * 60;
 
       changeTheme(state.settings.colorTheme[state.currentCycle]);
       changeTitle(
         state.settings.time[state.currentCycle],
         state.currentCycle === "pomodoro" ? "Time to focus!" : "Take a break!"
       );
-      
     },
 
     decrementTime(state, action) {
-      state.value--;
+      state.currentTime--;
       state.interval = action.payload;
-    },
-    // Settings
-    changePomodoroTime(state, action) {
-      state.settings.time.pomodoro = action.payload;
-    },
-    changeShortBreakTime(state, action) {
-      state.settings.time.shortBreak = action.payload;
-    },
-    changeLongBreakTime(state, action) {
-      state.settings.time.longBreak = action.payload;
-    },
-    changeLongBreakInterval(state, action) {
-      state.settings.longBreakInterval = action.payload;
-    },
-    enableAutoStartBreaks(state, action) {
-      state.settings.autoStartBreaks = action.payload;
-    },
-    enableAutoStartPomodoro(state, action) {
-      state.settings.autoStartPomodoro = action.payload;
-    },
-    changeAlarmSound(state, action) {
-      state.settings.alarmSound = action.payload;
-    },
-    changeAlarmRepetitions(state, action) {
-      state.settings.alarmRepetitions = action.payload;
-    },
-    changeTickingSound(state, action) {
-      state.settings.tickingSound = action.payload;
-    },
-    enableDarkModeWhenRunning(state, action) {
-      state.settings.darkModeWhenRunning = action.payload;
     },
     changeColorTheme(state, action) {
       state.settings.colorTheme[action.payload.cycle] = action.payload.color;
     },
-    // updateSettings(state, action) {
-    //   state.settings = action.payload;
-    // },
+    updateSettings(state, action) {
+      state.settings = action.payload;
+    },
     resetSettings(state) {
       state.settings = DEFAULT_SETTINGS;
     },
@@ -101,18 +69,8 @@ const timerSlice = createSlice({
 export const {
   pauseTimer,
   changeCycle,
-  updateTime,
-  changePomodoroTime,
-  changeShortBreakTime,
-  changeLongBreakTime,
-  changeLongBreakInterval,
-  enableAutoStartBreaks,
-  enableAutoStartPomodoro,
-  changeAlarmSound,
-  changeAlarmRepetitions,
-  changeTickingSound,
-  enableDarkModeWhenRunning,
   changeColorTheme,
+  updateSettings,
   resetSettings,
 } = timerSlice.actions;
 
@@ -128,12 +86,12 @@ export function startTimer() {
 function decrementTime(id) {
   return async function (dispatch, getState) {
     const {
-      value,
+      currentTime,
       currentCycle,
       cycleCount: { pomodoro: pomodoroCount },
       settings: { longBreakInterval },
     } = getState();
-    if (value > 0)
+    if (currentTime > 0)
       return dispatch({ type: "timer/decrementTime", payload: id });
 
     // Complete Cycle
