@@ -32,9 +32,12 @@ export function loadState() {
     if (serializedState === null) return undefined;
     const state = JSON.parse(serializedState);
 
+    changeTitle(state.time.pomodoro, "Time to focus!")
+    changeTheme(state.colorTheme.pomodoro)
+
     return {
       ...DEFAULT_OPTIONS,
-      value: state.pomodoroTime * 60,
+      value: state.time.pomodoro * 60,
       settings: state,
     };
   } catch (err) {

@@ -1,13 +1,18 @@
+import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
+import { useForm } from "react-hook-form";
 
 import { FaXmark } from "react-icons/fa6";
 import { RxReset } from "react-icons/rx";
+import { FaRegSave } from "react-icons/fa";
+
 import { Modal } from "../../components/ui/Modal";
 import { TimerSettings } from "./TimerSettings";
 import { SoundSettings } from "./SoundSettings";
 import { ThemeSettings } from "./ThemeSettings";
-import { useDispatch } from "react-redux";
-import { resetSettings } from "../timer/timerSlice";
+import { resetSettings, updateSettings } from "../timer/timerSlice";
+import { DevTool } from "@hookform/devtools";
+import { DEFAULT_SETTINGS } from "../../utils/constants";
 
 const StyledSettings = styled.div`
   width: 100%;
@@ -67,9 +72,10 @@ const CloseButton = styled.button`
   color: var(--tertiary-color);
   cursor: pointer;
 `;
-const ResetButton = styled.button`
+const Button = styled.button`
   display: flex;
   gap: 10px;
+  flex: 1;
   align-items: center;
   justify-content: center;
   border-radius: 10px;
@@ -77,15 +83,24 @@ const ResetButton = styled.button`
   font-weight: bold;
   color: #fff;
   background-color: var(--primary-color);
-  transition: background-color 0.3s ease-in-out;
-  margin-inline: 20px;
-  margin-top: 20px;
+  transition: background-color 0.5s ease-in-out;
   &:hover {
     background-color: var(--secondary-color);
+  }
+  &:disabled {
+    background-color: #ccc;
+    color: #fff;
+    cursor: auto;
   }
   & svg {
     font-size: 20px;
   }
+`;
+const Buttons = styled.div`
+  display: flex;
+  gap: 20px;
+  margin-inline: 20px;
+  margin-top: 20px;
 `;
 
 export const FlexContainer = styled.div`
@@ -98,25 +113,65 @@ export const FlexContainer = styled.div`
 
 export default function Settings({ isOpen, onClose }) {
   const dispatch = useDispatch();
+  const settings = useSelector((store) => store.settings);
+  const { handleSubmit, control, reset, formState, setValue, getValues } =
+    useForm({
+      defaultValues: { ...settings, time: settings.time },
+      mode: "onChange",
+    });
+
+  const { errors, isDirty, isValid } = formState;
+
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <StyledSettings>
         <StyledSettingsHeader>
           <h2>Settings</h2>
-          <CloseButton onClick={onClose}>
+          <CloseButton
+            onClick={() => {
+              onClose();
+              reset(settings);
+            }}
+          >
             <FaXmark />
           </CloseButton>
         </StyledSettingsHeader>
-        <div className="scroll">
-          <TimerSettings />
-          <SoundSettings />
-          <ThemeSettings />
-        </div>
-        <ResetButton onClick={() => dispatch(resetSettings())}>
-          <RxReset />
-          Reset To Defaults
-        </ResetButton>
+        <form className="scroll">
+          <TimerSettings control={control} errors={errors} />
+          <SoundSettings
+            control={control}
+            errors={errors}
+            setValue={setValue}
+            getValues={getValues}
+          />
+          <ThemeSettings control={control} setValue={setValue}
+            getValues={getValues} />
+        </form>
+        <Buttons>
+          <Button
+            onClick={() => {
+              dispatch(resetSettings());
+              reset(DEFAULT_SETTINGS);
+              onClose();
+            }}
+          >
+            <RxReset />
+            Reset
+          </Button>
+          <Button
+            disabled={!isDirty || !isValid}
+            onClick={handleSubmit((data) => {
+              dispatch(updateSettings({ ...settings, ...data }));
+              reset(data)
+              onClose();
+            })}
+          >
+            <FaRegSave /> Save
+          </Button>
+        </Buttons>
       </StyledSettings>
+      <DevTool control={control} />
     </Modal>
   );
 }

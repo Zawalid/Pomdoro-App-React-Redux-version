@@ -54,11 +54,9 @@ const timerSlice = createSlice({
       state.currentTime--;
       state.interval = action.payload;
     },
-    changeColorTheme(state, action) {
-      state.settings.colorTheme[action.payload.cycle] = action.payload.color;
-    },
     updateSettings(state, action) {
       state.settings = action.payload;
+      changeTheme(state.settings.colorTheme[state.currentCycle]);
     },
     resetSettings(state) {
       state.settings = DEFAULT_SETTINGS;
@@ -69,7 +67,6 @@ const timerSlice = createSlice({
 export const {
   pauseTimer,
   changeCycle,
-  changeColorTheme,
   updateSettings,
   resetSettings,
 } = timerSlice.actions;

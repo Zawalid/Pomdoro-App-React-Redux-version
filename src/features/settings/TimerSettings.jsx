@@ -3,15 +3,7 @@ import { ToggleSwitch } from "../../components/ui/ToggleSwitch";
 import { InputNumber } from "../../components/ui/InputNumber";
 import { FlexContainer } from "./Settings";
 import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  changePomodoroTime,
-  changeShortBreakTime,
-  changeLongBreakTime,
-  changeLongBreakInterval,
-  enableAutoStartBreaks,
-  enableAutoStartPomodoro,
-} from "../timer/timerSlice";
+import { Controller } from "react-hook-form";
 
 const Times = styled.div`
   display: grid;
@@ -19,16 +11,7 @@ const Times = styled.div`
   gap: 20px;
 `;
 
-export function TimerSettings() {
-  const {
-    time: { pomodoro, shortBreak, longBreak },
-    longBreakInterval,
-    autoStartBreaks,
-    autoStartPomodoro,
-  } = useSelector((store) => store.settings);
-
-  const dispatch = useDispatch();
-
+export function TimerSettings({ control, errors }) {
   return (
     <div className="section">
       <h3>
@@ -37,48 +20,96 @@ export function TimerSettings() {
       </h3>
       <p>Time (Minutes)</p>
       <Times>
-        <InputNumber
-          min="1"
-          value={pomodoro}
-          onChange={(value) => dispatch(changePomodoroTime(value))}
-        >
-          Pomodoro
-        </InputNumber>
-        <InputNumber
-          min="0"
-          value={shortBreak}
-          onChange={(value) => dispatch(changeShortBreakTime(value))}
-        >
-          Short Break
-        </InputNumber>
-        <InputNumber
-          min="0"
-          value={longBreak}
-          onChange={(value) => dispatch(changeLongBreakTime(value))}
-        >
-          Long Break
-        </InputNumber>
+        <Controller
+          name="time.pomodoro"
+          control={control}
+          render={({ field }) => (
+            <InputNumber
+              label="Pomodoro"
+              {...field}
+              error={errors.time?.pomodoro?.message}
+            />
+          )}
+          rules={{
+            required: "Pomodoro time is required",
+            min: {
+              value: 0.01,
+              message: "Pomodoro time must be at least 1 second",
+            },
+          }}
+        />
+        <Controller
+          name="time.shortBreak"
+          control={control}
+          render={({ field }) => (
+            <InputNumber
+              label="Short Break"
+              {...field}
+              error={errors.time?.shortBreak?.message}
+            />
+          )}
+          rules={{
+            required: "Short break time is required",
+            min: {
+              value: 0.01,
+              message: "Short break time must be at least 1 second",
+            },
+          }}
+        />
+        <Controller
+          name="time.longBreak"
+          control={control}
+          render={({ field }) => (
+            <InputNumber
+              label="Long Break"
+              {...field}
+              error={errors.time?.longBreak?.message}
+            />
+          )}
+          rules={{
+            required: "Long break time is required",
+            min: {
+              value: 0.01,
+              message: "Long break time must be at least 1 second",
+            },
+          }}
+        />
       </Times>
       <FlexContainer>
         <p>Auto Start Breaks</p>
-        <ToggleSwitch
-          checked={autoStartBreaks}
-          onChange={(value) => dispatch(enableAutoStartBreaks(value))}
+        <Controller
+          name="autoStartBreaks"
+          control={control}
+          render={({ field }) => (
+            <ToggleSwitch checked={field.value} {...field} />
+          )}
         />
       </FlexContainer>
       <FlexContainer>
         <p>Auto Start Pomodoros</p>
-        <ToggleSwitch
-          checked={autoStartPomodoro}
-          onChange={(value) => dispatch(enableAutoStartPomodoro(value))}
+        <Controller
+          name="autoStartPomodoro"
+          control={control}
+          render={({ field }) => (
+            <ToggleSwitch checked={field.value} {...field} />
+          )}
         />
       </FlexContainer>
       <FlexContainer>
         <p>Long Break Interval</p>
-        <InputNumber
-          min="0"
-          value={longBreakInterval}
-          onChange={(value) => dispatch(changeLongBreakInterval(value))}
+        <Controller
+          name="longBreakInterval"
+          control={control}
+          render={({ field }) => <InputNumber {...field}
+            error={errors.longBreakInterval?.message}
+          />}
+          rules={{
+            required: "Long break interval is required",
+            min: {
+              value: 1,
+              message: "Long break interval must be at least 1",
+            },
+          }}
         />
       </FlexContainer>
     </div>

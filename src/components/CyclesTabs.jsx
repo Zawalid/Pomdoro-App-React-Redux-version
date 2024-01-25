@@ -1,8 +1,6 @@
 import styled from "styled-components";
 import { changeCycle } from "../features/timer/timerSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { changeTitle } from "../utils/helpers";
-import { useEffect } from "react";
 
 const StyledTabs = styled.div`
   display: flex;
@@ -57,12 +55,8 @@ const tabs = [
 
 export default function CyclesTabs() {
   const dispatch = useDispatch();
-  const pomodoroTime = useSelector((store) => store.settings.time.pomodoro);
   const currentCycle = useSelector((store) => store.currentCycle);
 
-  useEffect(() => {
-    changeTitle(pomodoroTime, "Time to focus!");
-  }, [pomodoroTime]);
 
   return (
     <StyledTabs>

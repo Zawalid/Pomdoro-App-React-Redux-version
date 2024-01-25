@@ -33,18 +33,6 @@ const StyledInput = styled.div`
   }
 `;
 
-// export function InputNumber({ children, onChange, ...props }) {
-//   return (
-//     <StyledInput>
-//       <label>{children}</label>
-//       <input
-//         type="number"
-//         onChange={(e) => onChange(e.target.value)}
-//         {...props}
-//       />
-//     </StyledInput>
-//   );
-// }
 
 export const InputNumber = forwardRef(function InputNumber(
   { label, error, ...props },

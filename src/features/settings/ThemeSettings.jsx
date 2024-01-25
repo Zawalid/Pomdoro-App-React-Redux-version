@@ -4,9 +4,7 @@ import styled, { css } from "styled-components";
 import { ToggleSwitch } from "../../components/ui/ToggleSwitch";
 import { FlexContainer } from "./Settings";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { changeColorTheme, enableDarkModeWhenRunning } from "../timer/timerSlice";
-import { changeTheme } from "../../utils/helpers";
+import { Controller } from "react-hook-form";
 
 const StyledThemeColor = styled.div`
   width: 90%;
@@ -34,11 +32,12 @@ const StyledThemeColor = styled.div`
   }
 `;
 
-const Color = styled.button`
+const Color = styled.div`
   width: 30px;
   height: 30px;
   border-radius: 5px;
   background-color: ${({ color }) => color};
+  cursor: pointer;
   transition: opacity 0.3s ease-in-out;
   &:hover {
     opacity: 0.8;
@@ -56,12 +55,9 @@ const Color = styled.button`
     `}
 `;
 
-export function ThemeSettings() {
+export function ThemeSettings({ control, setValue, getValues }) {
   const [currentCycle, setCurrentCycle] = useState(null);
-  const dispatch = useDispatch();
-  const { colorTheme, darkModeWhenRunning } = useSelector(
-    (store) => store.settings
-  );
+  const colorTheme = getValues("colorTheme");
 
   return (
     <div className="section">
@@ -79,13 +75,31 @@ export function ThemeSettings() {
               onClick={() => setCurrentCycle(cycle)}
             />
           ))}
+          <Controller
+            name="colorTheme.pomodoro"
+            control={control}
+            render={({ field }) => <input type="hidden" {...field} />}
+          />
+          <Controller
+            name="colorTheme.shortBreak"
+            control={control}
+            render={({ field }) => <input type="hidden" {...field} />}
+          />
+          <Controller
+            name="colorTheme.longBreak"
+            control={control}
+            render={({ field }) => <input type="hidden" {...field} />}
+          />
         </FlexContainer>
       </FlexContainer>
       <FlexContainer>
         <p>Dark Mode when running</p>
-        <ToggleSwitch
-          checked={darkModeWhenRunning}
-          onChange={(value) => dispatch(enableDarkModeWhenRunning(value))}
+        <Controller
+          name="darkModeWhenRunning"
+          control={control}
+          render={({ field }) => (
+            <ToggleSwitch checked={field.value} {...field} />
+          )}
         />
       </FlexContainer>
       <ThemeColor
@@ -93,15 +107,19 @@ export function ThemeSettings() {
         currentCycle={
           { cycle: currentCycle, color: colorTheme[currentCycle] } || {}
         }
+        onSelect={(color) =>
+          setValue(`colorTheme.${currentCycle}`, color, { shouldDirty: true })
+        }
       />
     </div>
   );
 }
 
-function ThemeColor({ onClose, currentCycle: { cycle, color: currentColor } }) {
-  const currentCycle  = useSelector((store) => store.currentCycle);
-  const dispatch = useDispatch();
-
+function ThemeColor({
+  onClose,
+  currentCycle: { cycle, color: currentColor },
+  onSelect,
+}) {
   return (
     <Modal isOpen={cycle !== null} onClose={onClose}>
       <StyledThemeColor>
@@ -115,11 +133,7 @@ function ThemeColor({ onClose, currentCycle: { cycle, color: currentColor } }) {
               key={color}
               color={color}
               size="large"
-              onClick={() => {
-                dispatch(changeColorTheme({ cycle: cycle, color: color }));
-                currentCycle === cycle && changeTheme(color);
-                onClose();
-              }}
+              onClick={() => (onSelect(color), onClose())}
             >
               {currentColor === color && <FaCheck />}
             </Color>
